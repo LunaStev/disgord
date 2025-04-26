@@ -7,10 +7,12 @@ import (
 )
 
 type Client struct {
-	Token      string
-	GatewayURL string
-	HTTPClient *http.Client
-	WebSocket  *websocket.Conn
+	Token           string
+	GatewayURL      string
+	HTTPClient      *http.Client
+	WebSocket       *websocket.Conn
+	BotID           string
+	MessageHandlers []MessageHandler
 }
 
 func NewClient(token string) *Client {
