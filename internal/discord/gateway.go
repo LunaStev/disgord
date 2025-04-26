@@ -177,6 +177,22 @@ func (c *Client) ListenEvents(ctx context.Context) {
 				}
 			}
 
+			if payload.T == "INTERACTION_CREATE" {
+				var interaction InteractionCreateData
+				if err := json.Unmarshal(payload.D, &interaction); err != nil {
+					log.Println("Failed to decode interaction payload:", err)
+					continue
+				}
+
+				log.Println("Received slash command interaction")
+
+				if handler, ok := c.SlashCommandHandlers[interaction.Data.Name]; ok {
+					handler(ctx, interaction)
+				} else {
+					log.Println("No handler for slash command:", interaction.Data.Name)
+				}
+			}
+
 			log.Printf("Received event type: %s", payload.T)
 		}
 	}()
