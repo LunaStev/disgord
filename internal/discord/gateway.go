@@ -39,6 +39,11 @@ func (c *Client) ConnectGateway(ctx context.Context) error {
 
 	c.StartHeartbeat(ctx, hello.D.HeartbeatInterval)
 
+	err = c.SendIdentify(ctx)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
