@@ -161,9 +161,8 @@ func (c *Client) ListenEvents(ctx context.Context) {
 
 				log.Printf("Received message from %s: %s", msg.Author.Username, msg.Content)
 
-				err := c.SendMessage(ctx, msg.ChannelID, "Hi there!")
-				if err != nil {
-					log.Println("Failed to send automatic reply:", err)
+				for _, handler := range c.MessageHandlers {
+					handler(msg)
 				}
 				log.Printf("Payload raw: %s", string(payload.D))
 			}
