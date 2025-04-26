@@ -32,3 +32,10 @@ func NewClient(token string) *Client {
 func (c *Client) OnMessageCreate(handler MessageHandler) {
 	c.MessageHandlers = append(c.MessageHandlers, handler)
 }
+
+func (c *Client) OnSlashCommand(name string, handler SlashCommandHandler) {
+	if c.SlashCommandHandlers == nil {
+		c.SlashCommandHandlers = make(map[string]SlashCommandHandler)
+	}
+	c.SlashCommandHandlers[name] = handler
+}
