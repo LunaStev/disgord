@@ -1,6 +1,7 @@
 package discord
 
 import (
+	"context"
 	"net/http"
 
 	"nhooyr.io/websocket"
