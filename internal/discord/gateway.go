@@ -131,3 +131,53 @@ func (c *Client) SendIdentify(ctx context.Context) error {
 
 	return nil
 }
+
+func (c *Client) ListenEvents(ctx context.Context) {
+	go func() {
+		for {
+			_, data, err := c.WebSocket.Read(ctx)
+			if err != nil {
+				log.Println("Failed to read from WebSocket:", err)
+				return
+			}
+
+			var payload Payload
+			if err := json.Unmarshal(data, &payload); err != nil {
+				log.Println("Failed to decode event payload:", err)
+				continue
+			}
+
+			if payload.T == "MESSAGE_CREATE" {
+				var msg MessageCreateData
+				if err := json.Unmarshal(payload.D, &msg); err != nil {
+					log.Println("Failed to decode message create payload:", err)
+					continue
+				}
+
+				if msg.Author.ID == c.BotID {
+					// Ignore messages sent by myself
+					continue
+				}
+
+				log.Printf("Received message from %s: %s", msg.Author.Username, msg.Content)
+
+				err := c.SendMessage(ctx, msg.ChannelID, "Hi there!")
+				if err != nil {
+					log.Println("Failed to send automatic reply:", err)
+				}
+			}
+
+			if payload.T == "READY" {
+				var ready ReadyPayload
+				if err := json.Unmarshal(payload.D, &ready); err != nil {
+					log.Println("Failed to decode ready payload:", err)
+				} else {
+					c.BotID = ready.User.ID
+					log.Printf("Bot ID set to: %s", c.BotID)
+				}
+			}
+
+			log.Printf("Received event type: %s", payload.T)
+		}
+	}()
+}
