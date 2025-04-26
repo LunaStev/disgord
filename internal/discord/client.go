@@ -6,6 +6,8 @@ import (
 	"nhooyr.io/websocket"
 )
 
+type MessageHandler func(msg MessageCreateData)
+
 type Client struct {
 	Token           string
 	GatewayURL      string
