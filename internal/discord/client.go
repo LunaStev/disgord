@@ -24,3 +24,7 @@ func NewClient(token string) *Client {
 		HTTPClient: &http.Client{},
 	}
 }
+
+func (c *Client) OnMessageCreate(handler MessageHandler) {
+	c.MessageHandlers = append(c.MessageHandlers, handler)
+}
