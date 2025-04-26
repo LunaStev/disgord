@@ -79,5 +79,7 @@ func (c *Client) SendIdentify(ctx context.Context) error {
 		}
 	}
 
+	log.Println("Sent Identify payload")
+
 	return nil
 }
