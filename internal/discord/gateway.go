@@ -155,7 +155,6 @@ func (c *Client) ListenEvents(ctx context.Context) {
 				}
 
 				if msg.Author.ID == c.BotID {
-					// Ignore messages sent by myself
 					continue
 				}
 
