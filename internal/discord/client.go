@@ -9,12 +9,13 @@ import (
 type MessageHandler func(msg MessageCreateData)
 
 type Client struct {
-	Token           string
-	GatewayURL      string
-	HTTPClient      *http.Client
-	WebSocket       *websocket.Conn
-	BotID           string
-	MessageHandlers []MessageHandler
+	Token                string
+	GatewayURL           string
+	HTTPClient           *http.Client
+	WebSocket            *websocket.Conn
+	BotID                string
+	MessageHandlers      []MessageHandler
+	SlashCommandHandlers map[string]SlashCommandHandler
 }
 
 func NewClient(token string) *Client {
