@@ -165,6 +165,7 @@ func (c *Client) ListenEvents(ctx context.Context) {
 				if err != nil {
 					log.Println("Failed to send automatic reply:", err)
 				}
+				log.Printf("Payload raw: %s", string(payload.D))
 			}
 
 			if payload.T == "READY" {
