@@ -8,6 +8,8 @@ import (
 
 type MessageHandler func(msg MessageCreateData)
 
+type SlashCommandHandler func(ctx context.Context, interaction InteractionCreateData)
+
 type Client struct {
 	Token                string
 	GatewayURL           string
