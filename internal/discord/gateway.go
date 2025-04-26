@@ -79,9 +79,44 @@ func (c *Client) StartHeartbeat(ctx context.Context, intervalMs int) {
 func (c *Client) SendIdentify(ctx context.Context) error {
 	identify := struct {
 		Op int `json:"op"`
-		D struct {
-			Token string `json:"token"`
-		}
+		D  struct {
+			Token      string `json:"token"`
+			Intents    int    `json:"intents"`
+			Properties struct {
+				OS      string `json:"$os"`
+				Browser string `json:"$browser"`
+				Device  string `json:"$device"`
+			} `json:"properties"`
+		} `json:"d"`
+	}{
+		Op: 2,
+		D: struct {
+			Token      string `json:"token"`
+			Intents    int    `json:"intents"`
+			Properties struct {
+				OS      string `json:"$os"`
+				Browser string `json:"$browser"`
+				Device  string `json:"$device"`
+			} `json:"properties"`
+		}{
+			Token:   c.Token,
+			Intents: 513,
+			Properties: struct {
+				OS      string `json:"$os"`
+				Browser string `json:"$browser"`
+				Device  string `json:"$device"`
+			}{
+				OS:      "linux",
+				Browser: "disgord",
+				Device:  "disgord",
+			},
+		},
+	}
+
+	data, _ := json.Marshal(identify)
+	err := c.WebSocket.Write(ctx, websocket.MessageText, data)
+	if err != nil {
+		return err
 	}
 
 	log.Println("Sent Identify payload")
