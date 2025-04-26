@@ -50,6 +50,8 @@ func (c *Client) ConnectGateway(ctx context.Context) error {
 		return err
 	}
 
+	c.ListenEvents(ctx)
+
 	return nil
 }
 
