@@ -37,7 +37,15 @@ func (c *Client) ConnectGateway(ctx context.Context) error {
 
 	log.Printf("Received hello event. Heartbeat interval: %d ms", hello.D.HeartbeatInterval)
 
-	c.StartHeartbeat(ctx, hello.D.HeartbeatInterval)
+	/*
+	* A temporary measure
+	 */
+	interval := hello.D.HeartbeatInterval
+	if interval == 0 {
+		interval = 40000 // fallback to 40 seconds
+	}
+
+	c.StartHeartbeat(ctx, interval)
 
 	err = c.SendIdentify(ctx)
 	if err != nil {
